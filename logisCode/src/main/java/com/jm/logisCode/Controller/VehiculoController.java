@@ -13,41 +13,37 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/vehicle")
+@PreAuthorize("isAuthenticated()")
 public class VehiculoController {
 
     @Autowired
     private VehiculoService vehiculoService;
 
     @GetMapping("")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Vehiculo>> getAllVehicles(){
         List<Vehiculo> vehicleList = vehiculoService.findAllVehicles();
         return new ResponseEntity<>(vehicleList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Vehiculo> getVehicleById(@PathVariable Long id){
         Vehiculo toSearch= vehiculoService.findById(id);
         return new ResponseEntity<>(toSearch,HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Vehiculo> createVehicle(@RequestBody Vehiculo vehicle){
         Vehiculo toCreate = vehiculoService.createVehiculo(vehicle);
         return new ResponseEntity<>(toCreate, HttpStatus.CREATED);
     }
 
     @PatchMapping("/update/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Vehiculo> updateVehiculo(@PathVariable Long id, @RequestBody Vehiculo vehicle){
         Vehiculo toUpdate = vehiculoService.updateVehiculo(id,vehicle);
         return new ResponseEntity<>(toUpdate,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> deleteVehicleById(@PathVariable Long id){
         vehiculoService.deleteVehiculo(id);
         return new ResponseEntity<>("vehicle delete correctly",HttpStatus.NOT_FOUND);

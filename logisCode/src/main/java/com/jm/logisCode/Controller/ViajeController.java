@@ -13,55 +13,49 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/travel")
+@PreAuthorize("isAuthenticated()")
 public class ViajeController {
 
     @Autowired
     private ViajeService viajeService;
 
     @GetMapping("")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Viaje>> getAllTravels(){
         List<Viaje> travelList = viajeService.findAllTravels();
         return new ResponseEntity<>(travelList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Viaje> getTravelById( @PathVariable Long id){
         Viaje toSearch = viajeService.findTravelById(id);
         return new ResponseEntity<>(toSearch, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Viaje> createTravel(@RequestBody Viaje viaje){
         Viaje toCreate = viajeService.createViaje(viaje);
         return new ResponseEntity<>(toCreate, HttpStatus.CREATED);
     }
 
     @PostMapping("/{idTravel}/chofer/{idChofer}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Viaje> assignChofer(@PathVariable Long idTravel, @PathVariable Long idChofer){
         Viaje toAssign = viajeService.assignChofer(idTravel,idChofer);
         return new ResponseEntity<>(toAssign,HttpStatus.OK);
     }
 
     @PostMapping("/{idTravel}/vehiculo/{idVehiculo}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Viaje> assignVehiculo(@PathVariable Long idTravel, @PathVariable Long idVehiculo){
         Viaje toAssign = viajeService.assignVehiculo(idTravel,idVehiculo);
         return new ResponseEntity<>(toAssign,HttpStatus.OK);
     }
 
     @PatchMapping("/update/{idTravel}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Viaje> updateViaje(@PathVariable Long idTravel, @RequestBody Viaje viaje){
         Viaje toUpdate = viajeService.updateTravel(idTravel,viaje);
         return new ResponseEntity<>(toUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{idTravel}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> deleteTravelById(@PathVariable Long idTravel){
         viajeService.deleteTravelById(idTravel);
         return new ResponseEntity<>("travel delete correctly",HttpStatus.NOT_FOUND);
